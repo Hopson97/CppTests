@@ -4,6 +4,9 @@ Application::Application()
     : m_window({ 1280, 720 }, "Collide")
 {
     m_window.setFramerateLimit(60);
+
+    m_player.rect.setSize({ 32, 32 });
+    m_player.rect.setFillColor(sf::Color::Blue);
 }
 
 void Application::run()
@@ -30,13 +33,31 @@ void Application::checkWinEvents()
 
 void Application::onInput()
 {
+    float speed = 1;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+        m_player.velocity.y -= speed;
+    } 
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+        m_player.velocity.y += speed;
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+        m_player.velocity.x -= speed;
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+        m_player.velocity.x += speed;
+    }
 }
 
 void Application::onUpdate()
 {
+    m_player.rect.move(m_player.velocity);
+    m_player.velocity *= 0.99f;
 }
 
 void Application::onDraw()
 {
     m_tileMap.draw(m_window);
+
+    m_window.draw(m_player.rect);
 }

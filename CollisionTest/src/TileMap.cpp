@@ -5,7 +5,7 @@ TileMap::TileMap()
     m_tilesVertices.reserve(401);
     for (int y = 0; y < 10; y++) {
         for (int x = 0; x < 10; x++) {
-            addTile(x * TILE_SIZE, y * TILE_SIZE);
+            addTile(float(x * TILE_SIZE), float(y * TILE_SIZE));
         }
     }
 }

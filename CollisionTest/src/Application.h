@@ -4,6 +4,12 @@
 
 #include "TileMap.h"
 
+struct Player
+{
+    sf::RectangleShape rect;
+    sf::Vector2f velocity;
+};
+
 class Application
 {
     public:
@@ -20,5 +26,5 @@ class Application
         sf::RenderWindow m_window;
         TileMap m_tileMap;
 
-        sf::RectangleShape m_playerRect;
+        Player m_player;
 };
