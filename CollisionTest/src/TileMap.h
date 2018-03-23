@@ -9,9 +9,11 @@ class TileMap
 {
     public:
         TileMap();
+        void draw(sf::RenderTarget& target);
 
     private:
-        void addTile(int x, int y);
+        void addTile(float x, float y);
 
-        std::vector<sf::Vertex> m_tiles;
+        std::vector<sf::Vertex> m_tilesVertices;
+        std::vector<bool> m_isTile;
 };

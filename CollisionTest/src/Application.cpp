@@ -38,4 +38,5 @@ void Application::onUpdate()
 
 void Application::onDraw()
 {
+    m_tileMap.draw(m_window);
 }
