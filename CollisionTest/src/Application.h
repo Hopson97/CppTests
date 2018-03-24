@@ -15,7 +15,7 @@ class Application
     private:
         void checkWinEvents();
         void onInput();
-        void onUpdate();
+        void onUpdate(float dt);
         void onDraw();
 
         sf::RenderWindow m_window;

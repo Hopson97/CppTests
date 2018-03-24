@@ -10,10 +10,11 @@ Application::Application()
 
 void Application::run()
 {
+    sf::Clock clock;
     while (m_window.isOpen()) {
         checkWinEvents();
         onInput();
-        onUpdate();
+        onUpdate(clock.restart().asSeconds());
         m_window.clear();
         onDraw();
         m_window.display();
@@ -38,13 +39,13 @@ void Application::onInput()
     m_player.input();
 }
 
-void Application::onUpdate()
+void Application::onUpdate(float dt)
 {
     static int n = 1;
-    m_player.update();
+    m_player.update(dt);
     auto position = m_player.getPosition();
-    auto boxSize  = m_player.getBoxSize();
-    
+    auto boxSize = m_player.getBoxSize();
+
     int px = int(position.x / TILE_SIZE);
     int py = int(position.y / TILE_SIZE);
 
@@ -55,7 +56,7 @@ void Application::onUpdate()
             if (&tile == &TileType::GRASS) {
                 sf::FloatRect tileRect;
                 tileRect.left = (x + px) * TILE_SIZE; //calculate the tile position
-                tileRect.top  = (y + py) * TILE_SIZE; //and create bounds 
+                tileRect.top = (y + py) * TILE_SIZE; //and create bounds 
                 tileRect.width = TILE_SIZE;
                 tileRect.height = TILE_SIZE;
 
@@ -66,11 +67,11 @@ void Application::onUpdate()
                 playerRect.height = boxSize.y * TILE_SIZE;
 
                 if (playerRect.intersects(tileRect)) {
-                    m_player.collisionResponse(tileRect.left, tileRect.top);
                 }
             }
         }
     }
+    
 }
 
 void Application::onDraw()

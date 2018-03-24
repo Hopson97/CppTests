@@ -14,7 +14,7 @@ Player::Player()
 
 void Player::input()
 {
-    float speed = 0.25;
+    float speed = 25.0f;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         m_velocity.y -= speed;
     }
@@ -30,9 +30,9 @@ void Player::input()
     }
 }
 
-void Player::update()
+void Player::update(float dt)
 {
-    m_rect.move(m_velocity);
+    m_rect.move(m_velocity * dt);
     m_velocity *= 0.95f;
 }
 
@@ -51,31 +51,4 @@ const sf::Vector2f & Player::getBoxSize() const
 }
 
 
-void Player::collisionResponse(float x, float y)
-{
-    auto position = m_rect.getPosition();
-    
-    if (m_velocity.x > 0) {
-        position.x = x - m_boxSize.x * TILE_SIZE;
-        m_velocity.x = 0;
-        std::cout << "XG\n";
-    } 
-    else if (m_velocity.x < 0) {
-        position.x = x + m_boxSize.x * TILE_SIZE;
-        m_velocity.x = 0;
-        std::cout << "XL\n";
-    }
-    
-    if (m_velocity.y > 0) {
-        position.y = y - m_boxSize.y * TILE_SIZE;
-        m_velocity.y = 0;
-        std::cout << "YG\n";
-    }
-    else if (m_velocity.y < 0) {
-        position.y = y + m_boxSize.y * TILE_SIZE - TILE_SIZE;
-        m_velocity.y = 0;
-        std::cout << "YL\n";
-    }
-    m_rect.setPosition(position);
-}
 

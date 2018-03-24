@@ -8,13 +8,12 @@ class Player
         Player();
 
         void input();
-        void update(); 
+        void update(float dt); 
+
         void draw(sf::RenderTarget& window);
 
         const sf::Vector2f& getPosition() const;
         const sf::Vector2f& getBoxSize() const;
-
-        void collisionResponse(float x, float y);
 
     private:
         sf::Vector2f m_boxSize;
