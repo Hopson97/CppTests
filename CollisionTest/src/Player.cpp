@@ -29,7 +29,7 @@ void Player::input()
         m_velocity.x += speed;
     }
 }
-sf::Vector2f old;
+
 void Player::update()
 {
     old = getPosition();
@@ -54,9 +54,6 @@ const sf::Vector2f & Player::getBoxSize() const
 
 void Player::collisionResponse(float x, float y)
 {
-    m_rect.setPosition(old);
-
-
     auto position = m_rect.getPosition();
     
     if (m_velocity.x > 0) {
@@ -80,6 +77,6 @@ void Player::collisionResponse(float x, float y)
         m_velocity.y = 0;
         std::cout << "YL\n";
     }
-   // m_rect.setPosition(position);
+    m_rect.setPosition(position);
 }
 
