@@ -8,21 +8,21 @@ const TileType TileType::GRASS  ({ 75, 200, 25 }, true);
 TileType::TileType(sf::Color color, bool canCollide)
     :   color(color)
     ,   collidable(canCollide)
-{
-
-}
+{}
 
 
 TileMap::TileMap()
 {
-    int heights[25];
+    std::vector<int> heights;
 
-    for (int i = 0; i < 25; i++) {
-        heights[i] = i / 2;
+    
+
+    for (int i = -10; i < WIDTH - 10; i++) {
+        heights.push_back(abs(i / 2));
     }
 
-    for (int y = 0; y < 10; y++) {
-        for (int x = 0; x < 25; x++) {
+    for (int y = 0; y < HEIGHT; y++) {
+        for (int x = 0; x < WIDTH; x++) {
             int h = heights[x];
             if (y > h) {
                 m_tileTypes.push_back(&TileType::GRASS);
@@ -33,10 +33,10 @@ TileMap::TileMap()
         }
     }
 
-    m_tilesVertices.reserve(10 * 25 * 4);
-    for (int y = 0; y < 10; y++) {
-        for (int x = 0; x < 25; x++) {
-            int i = y * 25 + x;
+    m_tilesVertices.reserve(HEIGHT * WIDTH * 4);
+    for (int y = 0; y < HEIGHT; y++) {
+        for (int x = 0; x < WIDTH; x++) {
+            int i = y * WIDTH + x;
             if (m_tileTypes[i] != &TileType::AIR)
                 addTile(float(x * TILE_SIZE), float(y * TILE_SIZE), i);
         }
@@ -66,4 +66,14 @@ void TileMap::addTile(float x, float y, int index)
 void TileMap::draw(sf::RenderTarget & target)
 {
     target.draw(m_tilesVertices.data(), m_tilesVertices.size(), sf::Quads);
+}
+
+const TileType & TileMap::getTile(int x, int y) const
+{
+    try {
+        return *m_tileTypes.at(y * WIDTH + x);
+    }
+    catch (std::out_of_range& e) {
+        return TileType::AIR;
+    }
 }

@@ -5,6 +5,9 @@
 
 constexpr int TILE_SIZE = 32;
 
+constexpr int WIDTH  = 100;
+constexpr int HEIGHT = 15;
+
 struct TileType
 {
 
@@ -24,6 +27,8 @@ class TileMap
     public:
         TileMap();
         void draw(sf::RenderTarget& target);
+
+        const TileType& getTile(int x, int y) const;
 
     private:
         void addTile(float x, float y, int index);
