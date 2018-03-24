@@ -48,3 +48,17 @@ const sf::Vector2f & Player::getBoxSize() const
     return m_boxSize;
 }
 
+void Player::collisionResponse(float x, float y)
+{
+    auto position = m_rect.getPosition();
+    if (m_velocity.x > 0) {
+        position.x = x - m_boxSize.x * TILE_SIZE;
+        m_velocity.x = 0;
+    } 
+    else if (m_velocity.x < 0) {
+        position.x = x + m_boxSize.x * TILE_SIZE;
+        m_velocity.x = 0;
+    }
+    m_rect.setPosition(position);
+}
+

@@ -14,6 +14,8 @@ class Player
         const sf::Vector2f& getPosition() const;
         const sf::Vector2f& getBoxSize() const;
 
+        void collisionResponse(float x, float y);
+
     private:
         sf::Vector2f m_boxSize;
         sf::RectangleShape m_rect;
