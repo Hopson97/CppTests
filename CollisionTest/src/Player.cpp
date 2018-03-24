@@ -32,7 +32,6 @@ void Player::input()
 
 void Player::update()
 {
-    old = getPosition();
     m_rect.move(m_velocity);
     m_velocity *= 0.95f;
 }

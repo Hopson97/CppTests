@@ -71,7 +71,7 @@ const TileType & TileMap::getTile(int x, int y) const
     try {
         return *m_tileTypes.at(y * WIDTH + x);
     }
-    catch (std::out_of_range& e) {
+    catch (std::out_of_range&) {
         return TileType::AIR;
     }
 }
