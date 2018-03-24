@@ -2,6 +2,8 @@
 
 #include "TileMap.h"
 
+#include <iostream>
+
 Player::Player()
 :   m_boxSize (1.0f, 2.0f)
 ,   m_rect({ (float)TILE_SIZE * m_boxSize.x, (float)TILE_SIZE * m_boxSize.y })
@@ -27,11 +29,12 @@ void Player::input()
         m_velocity.x += speed;
     }
 }
-
+sf::Vector2f old;
 void Player::update()
 {
+    old = getPosition();
     m_rect.move(m_velocity);
-    m_velocity *= 0.99f;
+    m_velocity *= 0.95f;
 }
 
 void Player::draw(sf::RenderTarget & window)
@@ -48,17 +51,35 @@ const sf::Vector2f & Player::getBoxSize() const
     return m_boxSize;
 }
 
+
 void Player::collisionResponse(float x, float y)
 {
+    m_rect.setPosition(old);
+
+
     auto position = m_rect.getPosition();
+    
     if (m_velocity.x > 0) {
         position.x = x - m_boxSize.x * TILE_SIZE;
         m_velocity.x = 0;
+        std::cout << "XG\n";
     } 
     else if (m_velocity.x < 0) {
         position.x = x + m_boxSize.x * TILE_SIZE;
         m_velocity.x = 0;
+        std::cout << "XL\n";
     }
-    m_rect.setPosition(position);
+    
+    if (m_velocity.y > 0) {
+        position.y = y - m_boxSize.y * TILE_SIZE;
+        m_velocity.y = 0;
+        std::cout << "YG\n";
+    }
+    else if (m_velocity.y < 0) {
+        position.y = y + m_boxSize.y * TILE_SIZE - TILE_SIZE;
+        m_velocity.y = 0;
+        std::cout << "YL\n";
+    }
+   // m_rect.setPosition(position);
 }
 

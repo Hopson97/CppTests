@@ -48,6 +48,7 @@ void Application::onUpdate()
     int px = int(position.x / TILE_SIZE);
     int py = int(position.y / TILE_SIZE);
 
+    //Collision detection and response
     for (float y = -boxSize.y; y <= boxSize.y; y++) {
         for (float x = -boxSize.x; x <= boxSize.x; x++) {
             auto& tile = m_tileMap.getTile(int(x + px), int(y + py));

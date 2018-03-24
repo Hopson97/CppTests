@@ -3,7 +3,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-constexpr int TILE_SIZE = 32;
+constexpr int TILE_SIZE = 20;
 
 constexpr int WIDTH = 1280 / TILE_SIZE;
 constexpr int HEIGHT = 720 / TILE_SIZE;
