@@ -33,7 +33,7 @@ void Application::checkWinEvents()
 
 void Application::onInput()
 {
-    float speed = 1;
+    float speed = 0.25;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         m_player.velocity.y -= speed;
     } 
