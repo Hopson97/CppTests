@@ -5,7 +5,7 @@
 
 constexpr int TILE_SIZE = 32;
 
-constexpr int WIDTH  = 100;
+constexpr int WIDTH  = 25;
 constexpr int HEIGHT = 15;
 
 struct TileType

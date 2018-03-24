@@ -15,16 +15,14 @@ TileMap::TileMap()
 {
     std::vector<int> heights;
 
-    
-
     for (int i = -10; i < WIDTH - 10; i++) {
-        heights.push_back(abs(i / 2));
+        heights.push_back(abs(i));
     }
 
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
             int h = heights[x];
-            if (y > h) {
+            if (y > h || y == 0 || x == 0 || x == WIDTH - 1) {
                 m_tileTypes.push_back(&TileType::GRASS);
             }
             else {
@@ -54,7 +52,7 @@ void TileMap::addTile(float x, float y, int index)
     std::cout << index << " " << m_tileTypes.size() << std::endl;
     tl.color = m_tileTypes[index]->color;
     tr.color = m_tileTypes[index]->color;
-    bl.color = m_tileTypes[index]->color;
+    bl.color = sf::Color::Black;
     br.color = m_tileTypes[index]->color;
 
     m_tilesVertices.push_back(tl);
