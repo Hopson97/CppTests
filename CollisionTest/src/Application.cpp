@@ -32,6 +32,9 @@ void Application::checkWinEvents()
         if (e.type == sf::Event::Closed) {
             m_window.close();
         }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+            m_window.close();
+        }
     }
 }
 
@@ -59,8 +62,8 @@ void Application::onUpdate()
     m_player.velocity *= 0.99f;
     static int n = 0;
 
-    int px = m_player.rect.getPosition().x / TILE_SIZE;
-    int py = m_player.rect.getPosition().y / TILE_SIZE;
+    int px = int(m_player.rect.getPosition().x / TILE_SIZE);
+    int py = int(m_player.rect.getPosition().y / TILE_SIZE);
 
     for (int y = -1; y <= 1; y++) {
         for (int x = -1; x <= 1; x++) {

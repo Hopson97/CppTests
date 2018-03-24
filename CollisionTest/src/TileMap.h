@@ -5,13 +5,11 @@
 
 constexpr int TILE_SIZE = 32;
 
-constexpr int WIDTH  = 25;
-constexpr int HEIGHT = 15;
+constexpr int WIDTH = 1280 / TILE_SIZE;
+constexpr int HEIGHT = 720 / TILE_SIZE;
 
 struct TileType
 {
-
-
     static const TileType AIR;
     static const TileType GRASS;
 
