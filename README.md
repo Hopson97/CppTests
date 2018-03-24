@@ -1,4 +1,4 @@
-#SFML Tests
+# SFML Tests
 
 Just some testing.
 
