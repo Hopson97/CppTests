@@ -3,12 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "TileMap.h"
-
-struct Player
-{
-    sf::RectangleShape rect;
-    sf::Vector2f velocity;
-};
+#include "Player.h"
 
 class Application
 {

@@ -6,11 +6,6 @@ Application::Application()
     : m_window({ 1280, 720 }, "Collide")
 {
     m_window.setFramerateLimit(60);
-
-    
-    m_player.rect.setSize({ (float)TILE_SIZE, (float)TILE_SIZE });
-    m_player.rect.setFillColor(sf::Color::Blue);
-    m_player.rect.setPosition(500, 100);
 }
 
 void Application::run()
@@ -40,41 +35,38 @@ void Application::checkWinEvents()
 
 void Application::onInput()
 {
-    float speed = 0.25;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        m_player.velocity.y -= speed;
-    } 
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        m_player.velocity.y += speed;
-    }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        m_player.velocity.x -= speed;
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        m_player.velocity.x += speed;
-    }
+    m_player.input();
 }
 
 void Application::onUpdate()
 {
-    m_player.rect.move(m_player.velocity);
-    m_player.velocity *= 0.99f;
-    static int n = 0;
+    static int n = 1;
+    m_player.update();
+    auto position = m_player.getPosition();
+    auto boxSize  = m_player.getBoxSize();
 
-    int px = int(m_player.rect.getPosition().x / TILE_SIZE);
-    int py = int(m_player.rect.getPosition().y / TILE_SIZE);
+   
+    
+    int px = int(position.x / TILE_SIZE);
+    int py = int(position.y / TILE_SIZE);
 
-    for (int y = -1; y <= 1; y++) {
-        for (int x = -1; x <= 1; x++) {
+    for (int y = -boxSize.y; y <= boxSize.y; y++) {
+        for (int x = -boxSize.x; x <= boxSize.x; x++) {
             auto& tile = m_tileMap.getTile(x + px, y + py);
             if (&tile == &TileType::GRASS) {
-                sf::FloatRect rect;
-                rect.left = (x + px) * TILE_SIZE;
-                rect.top  = (y + py) * TILE_SIZE;
-                rect.width = TILE_SIZE; 
-                rect.height = TILE_SIZE;
-                if (m_player.rect.getGlobalBounds().intersects(rect)) {
+                sf::FloatRect tileRect;
+                tileRect.left = (x + px) * TILE_SIZE;
+                tileRect.top  = (y + py) * TILE_SIZE;
+                tileRect.width = TILE_SIZE;
+                tileRect.height = TILE_SIZE;
+
+                sf::FloatRect playerRect;
+                playerRect.left = position.x;
+                playerRect.top = position.y;
+                playerRect.width = boxSize.x * TILE_SIZE;
+                playerRect.height = boxSize.y * TILE_SIZE;
+
+                if (playerRect.intersects(tileRect)) {
                     std::cout << n++ << " Collide af\n";
                 }
             }
@@ -86,5 +78,5 @@ void Application::onDraw()
 {
     m_tileMap.draw(m_window);
 
-    m_window.draw(m_player.rect);
+    m_player.draw(m_window);
 }
