@@ -1,7 +1,7 @@
 #include "Application.h"
 
 Application::Application()
-    : m_window({ 1280, 720 }, "Map Editor Test")
+    : m_window({ WinInfo::WIDTH, WinInfo::HEIGHT }, "Map Editor Test")
 {
     m_window.setFramerateLimit(60);
 }

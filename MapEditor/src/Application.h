@@ -2,6 +2,12 @@
 
 #include <SFML/Graphics.hpp>
 
+namespace WinInfo
+{
+    constexpr unsigned WIDTH = 1366;
+    constexpr unsigned HEIGHT = 768;
+}
+
 class Application
 {
     public:
