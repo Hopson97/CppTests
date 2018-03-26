@@ -22,6 +22,7 @@ class Application
 
         sf::RenderWindow m_window;
         sf::Texture m_spriteSheet;
+        sf::RectangleShape m_tile;
 
         std::vector<sf::IntRect> m_tileSectors;
         std::vector<sf::RectangleShape> temp;
