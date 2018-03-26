@@ -8,6 +8,8 @@ namespace WinInfo
     constexpr unsigned HEIGHT = 768;
 }
 
+constexpr unsigned TILE_SIZE = 32;
+
 class Application
 {
     public:
@@ -19,4 +21,8 @@ class Application
         void handleEvents();
 
         sf::RenderWindow m_window;
+        sf::Texture m_spriteSheet;
+
+        std::vector<sf::IntRect> m_tileSectors;
+        std::vector<sf::RectangleShape> temp;
 };
