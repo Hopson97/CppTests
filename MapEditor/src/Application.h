@@ -1,6 +1,8 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <array>
+#include <vector>
 
 namespace WinInfo
 {
@@ -8,7 +10,8 @@ namespace WinInfo
     constexpr unsigned HEIGHT = 768;
 }
 
-constexpr unsigned TILE_SIZE = 32;
+constexpr float TILE_SIZE = 32;
+constexpr unsigned MAP_SIZE = 64;
 
 class Application
 {
@@ -20,10 +23,13 @@ class Application
     private:
         void handleEvents();
 
+        std::array<int, MAP_SIZE * MAP_SIZE> m_tileMap;
+        std::vector<sf::Vertex> m_gridLines;
+
         sf::RenderWindow m_window;
         sf::Texture m_spriteSheet;
-        sf::RectangleShape m_tile;
 
         std::vector<sf::IntRect> m_tileSectors;
-        std::vector<sf::RectangleShape> temp;
+
+        sf::RectangleShape m_stamp;
 };

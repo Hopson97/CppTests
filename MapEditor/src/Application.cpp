@@ -12,30 +12,43 @@ Application::Application()
         int beginY = y * TILE_SIZE;
         for (int x = 0; x < m_spriteSheet.getSize().x / 32; x++) {
             int beginX = x * TILE_SIZE;
-
             m_tileSectors.emplace_back(beginX, beginY, TILE_SIZE, TILE_SIZE);
-            temp.emplace_back(sf::Vector2f{ (float)TILE_SIZE, (float)TILE_SIZE });
-            temp.back().setPosition(beginX + (x * 2), beginY + (y * 2));
-            temp.back().setTexture(&m_spriteSheet);
-            temp.back().setTextureRect(m_tileSectors.back());
         }
     }
-    m_tile.setSize({ (float)m_spriteSheet.getSize().x, (float)m_spriteSheet.getSize().y });
-    m_tile.setTexture(&m_spriteSheet);
+
+    m_stamp.setSize({ TILE_SIZE, TILE_SIZE });
+
+    float startPoint = 0;
+    float endPoint = MAP_SIZE * TILE_SIZE;
+    for (int i = 0; i < MAP_SIZE; i++) {
+        sf::Vertex beginY;
+        sf::Vertex endY;
+        sf::Vertex beginX;
+        sf::Vertex endX;
+        beginY.position = { startPoint, i * TILE_SIZE };
+        endY.position = { endPoint,   i *  TILE_SIZE };
+        beginX.position = { i *  TILE_SIZE, startPoint };
+        endX.position = { i *  TILE_SIZE, endPoint };
+        m_gridLines.insert(m_gridLines.end(), { beginX, endX, beginY, endY });
+    }
 }
 
 void Application::run()
 {
     while (m_window.isOpen()) {
         handleEvents();
-
         m_window.clear();
 
-        for (auto& rect : temp) {
-            //m_window.draw(rect);
-        }
+        float mx = (float)sf::Mouse::getPosition(m_window).x;
+        float my = (float)sf::Mouse::getPosition(m_window).y;
 
-        m_window.draw(m_tile);
+        m_stamp.setPosition({mx - (int)mx % (int)TILE_SIZE,
+                             my - (int)my % (int)TILE_SIZE });
+
+
+        m_window.draw(m_stamp);
+        m_window.draw(m_gridLines.data(), m_gridLines.size(), sf::Lines);
+
 
         m_window.display();
     }
