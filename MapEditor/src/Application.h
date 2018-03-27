@@ -32,4 +32,6 @@ class Application
         std::vector<sf::IntRect> m_tileSectors;
 
         sf::RectangleShape m_stamp;
+
+        sf::View m_view;
 };

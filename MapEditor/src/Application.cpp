@@ -4,6 +4,7 @@
 
 Application::Application()
     : m_window({ WinInfo::WIDTH, WinInfo::HEIGHT }, "Map Editor Test")
+    , m_view    ({0, 0, 1366, 768})
 {
     m_window.setFramerateLimit(60);
     m_spriteSheet.loadFromFile("res/tiles.png");
@@ -11,7 +12,7 @@ Application::Application()
     for (int y = 0; y < m_spriteSheet.getSize().y / 32; y++) {
         int beginY = y * TILE_SIZE;
         for (int x = 0; x < m_spriteSheet.getSize().x / 32; x++) {
-            int beginX = x * TILE_SIZE;
+            int beginX = x * (int)TILE_SIZE;
             m_tileSectors.emplace_back(beginX, beginY, TILE_SIZE, TILE_SIZE);
         }
     }
@@ -38,13 +39,17 @@ void Application::run()
     while (m_window.isOpen()) {
         handleEvents();
         m_window.clear();
+        m_window.setView(m_view);
+        
 
-        float mx = (float)sf::Mouse::getPosition(m_window).x;
-        float my = (float)sf::Mouse::getPosition(m_window).y;
-
+        auto pixelMousePos = sf::Mouse::getPosition(m_window);
+        auto worldPosition = m_window.mapPixelToCoords(pixelMousePos);
+        auto mx = worldPosition.x;
+        auto my = worldPosition.y;
+        
         m_stamp.setPosition({mx - (int)mx % (int)TILE_SIZE,
                              my - (int)my % (int)TILE_SIZE });
-
+        
 
         m_window.draw(m_stamp);
         m_window.draw(m_gridLines.data(), m_gridLines.size(), sf::Lines);
