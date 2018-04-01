@@ -16,4 +16,5 @@ class Application
         void onDraw();
 
         sf::RenderWindow m_window;
+        sf::RectangleShape m_player;
 };
