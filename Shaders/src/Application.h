@@ -17,4 +17,6 @@ class Application
 
         sf::RenderWindow m_window;
         sf::RectangleShape m_player;
+        sf::Shader m_postFXShaderTest;
+        sf::RectangleShape m_frameBuffer;
 };
