@@ -7,6 +7,7 @@ constexpr int PLAYER_SIZE = TILE_SIZE - 5;
 constexpr int WIN_WIDTH = TILE_SIZE * WORLD_SIZE + 50;
 constexpr int WIN_HEIGHT = TILE_SIZE * WORLD_SIZE + 20;
 
-constexpr float ACCELERATION = 0.45f;
+constexpr float ACCELERATION = 0.4f;
+constexpr float ACC_DAMP = 0.88f;
 
 constexpr float PI = 3.14159;

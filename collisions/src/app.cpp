@@ -65,8 +65,24 @@ void Application::onInput()
 
     m_player.sprite.setRotation(rotation * 180 / PI + 90);
 
-    auto rads = m_player.sprite.getRotation() * PI / 180;
     if (m_keyboard.isKeyDown(sf::Keyboard::W)) {
+        auto rads = (m_player.sprite.getRotation() + 90) * PI / 180;
+        m_player.velocity.x -= std::cos(rads) * ACCELERATION;
+        m_player.velocity.y -= std::sin(rads) * ACCELERATION;
+    }
+    else if (m_keyboard.isKeyDown(sf::Keyboard::S)) {
+        auto rads = (m_player.sprite.getRotation() + 90) * PI / 180;
+        m_player.velocity.x += std::cos(rads) * ACCELERATION;
+        m_player.velocity.y += std::sin(rads) * ACCELERATION;
+    }
+
+    if (m_keyboard.isKeyDown(sf::Keyboard::A)) {
+        auto rads = (m_player.sprite.getRotation()) * PI / 180;
+        m_player.velocity.x -= std::cos(rads) * ACCELERATION;
+        m_player.velocity.y -= std::sin(rads) * ACCELERATION;
+    }
+    else if (m_keyboard.isKeyDown(sf::Keyboard::D)) {
+        auto rads = (m_player.sprite.getRotation()) * PI / 180;
         m_player.velocity.x += std::cos(rads) * ACCELERATION;
         m_player.velocity.y += std::sin(rads) * ACCELERATION;
     }
@@ -75,7 +91,7 @@ void Application::onInput()
 void Application::onUpdate()
 {
     m_player.sprite.move(m_player.velocity);
-    m_player.velocity *= 0.92f;
+    m_player.velocity *= ACC_DAMP;
 }
 
 void Application::onRender() { m_window.draw(m_player.sprite); }
