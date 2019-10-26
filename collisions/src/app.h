@@ -8,17 +8,16 @@
 #include "input/keyboard.h"
 
 class Application {
-    struct Tile {
-        int type;
-        int flag;
-    };
-
     struct Entity {
         sf::RectangleShape sprite;
         sf::Vector2f velocity;
     };
 
   public:
+    struct Tile {
+        int type;
+        int flag;
+    };
     Application();
 
     void run();
@@ -35,4 +34,6 @@ class Application {
 
     Keyboard m_keyboard;
     Entity m_player;
+
+    std::vector<Tile> m_world;
 };
