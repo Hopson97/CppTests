@@ -3,6 +3,8 @@
 #include <ctime>
 #include <vector>
 
+#include "app.h"
+
 constexpr int WOLRD_SIZE = 16;
 constexpr int TILE_SIZE = 32;
 constexpr int PLAYER_SIZE = TILE_SIZE - 5;
@@ -42,6 +44,10 @@ auto createWorld()
 
 int main()
 {
+    Application app;
+    app.run();
+    return 0;
+
     std::srand(std::time(nullptr));
     sf::RenderWindow window({WIN_WIDTH, WIN_HEIGHT}, "SFML",
                             sf::Style::Default);

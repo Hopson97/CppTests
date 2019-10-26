@@ -1,6 +1,9 @@
 #include "app.h"
 #include "common.h"
 
+#include <cmath>
+#include <iostream>
+
 Application::Application()
     : m_window({WIN_WIDTH, WIN_HEIGHT}, "Collision Testing")
 {
@@ -12,6 +15,7 @@ Application::Application()
     m_player.sprite.setSize({PLAYER_SIZE, PLAYER_SIZE});
     m_player.sprite.setOutlineThickness(-1);
     m_player.sprite.setOutlineColor(sf::Color::White);
+    m_player.sprite.setOrigin({PLAYER_SIZE / 2, PLAYER_SIZE / 2});
     m_player.sprite.setTexture(&m_playerTexture);
     m_player.sprite.setPosition(TILE_SIZE * 2.5f, TILE_SIZE * 2.5f);
 
@@ -33,7 +37,7 @@ void Application::run()
         onUpdate();
 
         m_window.clear();
-        onUpdate();
+        onRender();
         m_window.display();
     }
 }
@@ -51,8 +55,27 @@ void Application::onEvent(sf::Event e)
     }
 }
 
-void Application::onInput() {}
+void Application::onInput()
+{
+    auto mousePosition = sf::Mouse::getPosition(m_window);
+    auto playerPosition = m_player.sprite.getPosition();
+    auto dx = mousePosition.x - playerPosition.x;
+    auto dy = mousePosition.y - playerPosition.y;
+    auto rotation = std::atan2(dy, dx);
 
-void Application::onUpdate() {}
+    m_player.sprite.setRotation(rotation * 180 / PI + 90);
 
-void Application::onRender() {}
+    auto rads = m_player.sprite.getRotation() * PI / 180;
+    if (m_keyboard.isKeyDown(sf::Keyboard::W)) {
+        m_player.velocity.x += std::cos(rads) * ACCELERATION;
+        m_player.velocity.y += std::sin(rads) * ACCELERATION;
+    }
+}
+
+void Application::onUpdate()
+{
+    m_player.sprite.move(m_player.velocity);
+    m_player.velocity *= 0.92f;
+}
+
+void Application::onRender() { m_window.draw(m_player.sprite); }

@@ -6,6 +6,7 @@ project(collisions VERSION 1.0)
 #Set executable
 set(SOURCES
     src/main.cpp
+    src/app.cpp
     src/input/keyboard.cpp
 )
 
@@ -21,7 +22,7 @@ if(MSVC)
     	/W4 /WX)
 else()
   	target_compile_options(${PROJECT_NAME} PRIVATE 
-		-Wall -Wextra -pedantic -Werror)		#Warning flags
+		-Wall -Wextra -pedantic)		#Warning flags
 endif()
 
 #Set module path
