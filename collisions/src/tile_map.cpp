@@ -71,3 +71,10 @@ void TileMap::draw(sf::RenderWindow &window)
 }
 
 Tile &TileMap::tileAt(int x, int y) { return m_world[y * WORLD_SIZE + x]; }
+
+AABB TileMap::tileAABB(int x, int y)
+{
+    return {static_cast<float>(x * TILE_SIZE),
+            static_cast<float>(y * TILE_SIZE), static_cast<float>(TILE_SIZE),
+            static_cast<float>(TILE_SIZE)};
+}
