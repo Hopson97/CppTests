@@ -7,6 +7,7 @@
 Application::Application()
     : m_window({WIN_WIDTH, WIN_HEIGHT}, "Collision Testing")
 {
+    m_camera.setSize(WIN_WIDTH, WIN_HEIGHT);
     m_window.setFramerateLimit(60);
     m_window.setKeyRepeatEnabled(false);
 
@@ -52,7 +53,7 @@ void Application::onEvent(sf::Event e)
 
 void Application::onInput()
 {
-    auto mousePosition = sf::Mouse::getPosition(m_window);
+    auto mousePosition = m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window));
     auto playerPosition = m_player.sprite.getPosition();
     auto dx = mousePosition.x - playerPosition.x;
     auto dy = mousePosition.y - playerPosition.y;
@@ -127,11 +128,14 @@ void Application::onUpdate()
     collide(0, m_player.velocity.y);
 
     m_player.velocity *= ACC_DAMP;
+
+    m_camera.setCenter(m_player.sprite.getPosition());
+    m_window.setView(m_camera);
 }
 
 void Application::onRender()
 {
-    m_tileMap.draw(m_window);
+    m_tileMap.draw(m_window, m_player.sprite.getPosition());
 
     m_window.draw(m_player.sprite);
 }

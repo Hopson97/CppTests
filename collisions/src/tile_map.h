@@ -24,7 +24,7 @@ class TileMap {
     TileMap();
 
     void resetFlags();
-    void draw(sf::RenderWindow &window);
+    void draw(sf::RenderWindow &window, const sf::Vector2f& cameraCenter);
     Tile &tileAt(int x, int y);
     AABB tileAABB(int x, int y);
 

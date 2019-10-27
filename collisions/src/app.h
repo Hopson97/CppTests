@@ -28,6 +28,7 @@ class Application {
 
     sf::RenderWindow m_window;
     sf::Texture m_playerTexture;
+    sf::View m_camera;
 
     Keyboard m_keyboard;
     Entity m_player;

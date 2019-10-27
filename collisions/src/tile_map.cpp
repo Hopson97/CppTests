@@ -2,6 +2,9 @@
 
 #include "common.h"
 
+#include <cmath>
+#include <iostream>
+
 TileMap::TileMap()
     : m_world(WORLD_SIZE * WORLD_SIZE)
 {
@@ -34,10 +37,16 @@ void TileMap::resetFlags()
     }
 }
 
-void TileMap::draw(sf::RenderWindow &window)
+void TileMap::draw(sf::RenderWindow &window, const sf::Vector2f& cameraCenter)
 {
-    for (int y = 0; y < WORLD_SIZE; y++) {
-        for (int x = 0; x < WORLD_SIZE; x++) {
+    const int left = std::max(0, (int)(cameraCenter.x - (WIN_WIDTH / 2)) / TILE_SIZE);
+    const int right = std::min(WORLD_SIZE, (int)(cameraCenter.x + (WIN_WIDTH / 2)) / TILE_SIZE) + 1;
+
+    const int top = std::max(0, (int)(cameraCenter.y - (WIN_HEIGHT / 2)) / TILE_SIZE);
+    const int bottom = std::min(WORLD_SIZE, (int)(cameraCenter.y + (WIN_HEIGHT / 2)) / TILE_SIZE) + 1;
+
+    for (int y = top; y < bottom; y++) {
+        for (int x = left; x < right; x++) {
             if (tileAt(x, y).type == Tile::Type::Air) {
                 if (tileAt(x, y).flag == Tile::Flag::Testing) {
                     m_tile.setFillColor(sf::Color::Cyan);
