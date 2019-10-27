@@ -3,20 +3,20 @@
 #include "common.h"
 
 TileMap::TileMap()
-:   m_world(WORLD_SIZE * WORLD_SIZE)
+    : m_world(WORLD_SIZE * WORLD_SIZE)
 {
     for (int y = 0; y < WORLD_SIZE; y++) {
         for (int x = 0; x < WORLD_SIZE; x++) {
             if (x == 0 || y == 0 || x == WORLD_SIZE - 1 ||
                 y == WORLD_SIZE - 1) {
-                tileAt(x, y).type = 1;
+                tileAt(x, y).type = Tile::Type::Solid;
             }
             else {
                 if ((x > 3 || y > 3) && rand() % 100 > 80) {
-                    tileAt(x, y).type = 1;
+                    tileAt(x, y).type = Tile::Type::Solid;
                 }
                 else {
-                    tileAt(x, y).type = 0;
+                    tileAt(x, y).type = Tile::Type::Air;
                 }
             }
         }
@@ -30,7 +30,7 @@ TileMap::TileMap()
 void TileMap::resetFlags()
 {
     for (auto &tile : m_world) {
-        tile.flag = 0;
+        tile.flag = Tile::Flag::None;
     }
 }
 
@@ -38,21 +38,25 @@ void TileMap::draw(sf::RenderWindow &window)
 {
     for (int y = 0; y < WORLD_SIZE; y++) {
         for (int x = 0; x < WORLD_SIZE; x++) {
-            if (tileAt(x, y).type == 0) {
-                m_tile.setFillColor(sf::Color::Green);
+            if (tileAt(x, y).type == Tile::Type::Air) {
+                if (tileAt(x, y).flag == Tile::Flag::Testing) {
+                    m_tile.setFillColor(sf::Color::Cyan);
+                }
+                else {
+                    m_tile.setFillColor(sf::Color::Green);
+                }
             }
             else {
-                int flag = tileAt(x, y).flag;
-                switch (flag) {
-                    case 0:
+                switch (tileAt(x, y).flag) {
+                    case Tile::Flag::None:
                         m_tile.setFillColor(sf::Color::Blue);
                         break;
 
-                    case 1:
+                    case Tile::Flag::Testing:
                         m_tile.setFillColor(sf::Color::Cyan);
                         break;
 
-                    case 2:
+                    case Tile::Flag::Colliding:
                         m_tile.setFillColor(sf::Color::Red);
                         break;
 

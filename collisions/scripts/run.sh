@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cfall
+sh scripts/build.sh
 if [ "$1" = "release" ]
 then
     ./bin/release/collisions 

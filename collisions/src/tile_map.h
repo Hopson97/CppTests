@@ -4,16 +4,19 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <vector>
 
-struct Box {
-    float x;
-    float y;
-    float width;
-    float height;
-};
+#include "physics.h"
 
 struct Tile {
-    int type;
-    int flag;
+    enum class Type {
+        Solid,
+        Air,
+    } type;
+
+    enum class Flag {
+        None,
+        Testing,
+        Colliding,
+    } flag;
 };
 
 class TileMap {
@@ -22,10 +25,8 @@ class TileMap {
 
     void resetFlags();
     void draw(sf::RenderWindow &window);
-
-    void collide(const Box& box);
-
     Tile &tileAt(int x, int y);
+    AABB tileAABB(int x, int y);
 
   private:
     std::vector<Tile> m_world;

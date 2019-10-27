@@ -17,7 +17,7 @@ Application::Application()
     m_player.body.setOutlineThickness(2);
     m_player.body.setOutlineColor(sf::Color::White);
     m_player.body.setFillColor(sf::Color::Transparent);
-    m_player.sprite.setOrigin({PLAYER_SIZE / 2, PLAYER_SIZE / 2});
+    // m_player.sprite.setOrigin({PLAYER_SIZE / 2, PLAYER_SIZE / 2});
     m_player.sprite.setTexture(&m_playerTexture);
     m_player.sprite.setPosition(TILE_SIZE * 2.5f, TILE_SIZE * 2.5f);
 }
@@ -84,13 +84,54 @@ void Application::onInput()
         m_player.velocity.x += std::cos(rads) * ACCELERATION;
         m_player.velocity.y += std::sin(rads) * ACCELERATION;
     }
+
+    m_player.sprite.setRotation(0);
+}
+
+void Application::collide(float vx, float vy)
+{
+    int playerX = m_player.body.getPosition().x;
+    int playerY = m_player.body.getPosition().y;
+    int size = PLAYER_SIZE;
+    for (int y = playerY; y < playerY + size; y++) {
+        for (int x = playerX; x < playerX + size; x++) {
+            // Transform to tile coords
+            int tileX = x / TILE_SIZE;
+            int tileY = y / TILE_SIZE;
+            auto &tile = m_tileMap.tileAt(tileX, tileY);
+            tile.flag = Tile::Flag::Testing;
+            if (tile.type == Tile::Type::Solid) {
+                tile.flag = Tile::Flag::Colliding;
+                if (vx > 0) {
+                    float worldX = ((tileX - 1) * TILE_SIZE) - 2;
+                    float worldY = tileY * TILE_SIZE;
+                    m_player.sprite.setPosition(worldX, m_player.sprite.getPosition().y);
+                    m_player.velocity.x = 0;
+                }
+            }
+        }
+    }
 }
 
 void Application::onUpdate()
 {
     m_tileMap.resetFlags();
-    m_player.sprite.move(m_player.velocity.x, 0);
+    const auto &boxPos = m_player.body.getPosition();
+    m_player.sprite.move(m_player.velocity);
+    m_player.body.setPosition(
+        m_player.sprite.getPosition().x - PLAYER_SIZE / PLAYER_SIZE,
+        m_player.sprite.getPosition().y - PLAYER_SIZE / PLAYER_SIZE);
+    m_player.aabb = {boxPos.x, boxPos.y, boxPos.x + PLAYER_SIZE,
+                     boxPos.y + PLAYER_SIZE};
+    collide(m_player.velocity.x, 0);
+
     m_player.sprite.move(0, m_player.velocity.y);
+    m_player.body.setPosition(
+        m_player.sprite.getPosition().x - PLAYER_SIZE / PLAYER_SIZE,
+        m_player.sprite.getPosition().y - PLAYER_SIZE / PLAYER_SIZE);
+    m_player.aabb = {boxPos.x, boxPos.y, boxPos.x + PLAYER_SIZE,
+                     boxPos.y + PLAYER_SIZE};
+    collide(0, m_player.velocity.y);
 
     m_player.velocity *= ACC_DAMP;
 }
@@ -99,9 +140,10 @@ void Application::onRender()
 {
     m_tileMap.draw(m_window);
 
-    m_player.body.setPosition(m_player.sprite.getPosition().x - PLAYER_SIZE / 2,
-                              m_player.sprite.getPosition().y -
-                                  PLAYER_SIZE / 2);
+    m_player.body.setPosition(
+        m_player.sprite.getPosition().x - PLAYER_SIZE / PLAYER_SIZE,
+        m_player.sprite.getPosition().y - PLAYER_SIZE / PLAYER_SIZE);
+
     m_window.draw(m_player.sprite);
     m_window.draw(m_player.body);
 }

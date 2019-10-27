@@ -9,6 +9,7 @@
 
 class Application {
     struct Entity {
+        AABB aabb;
         sf::RectangleShape body;
         sf::RectangleShape sprite;
         sf::Vector2f velocity;
