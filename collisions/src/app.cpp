@@ -52,18 +52,27 @@ void Application::onEvent(sf::Event e)
 
 void Application::onInput()
 {
+    auto mousePosition = sf::Mouse::getPosition(m_window);
+    auto playerPosition = m_player.sprite.getPosition();
+    auto dx = mousePosition.x - playerPosition.x;
+    auto dy = mousePosition.y - playerPosition.y;
+    auto rotation = std::atan2(dy, dx);
+
     if (m_keyboard.isKeyDown(sf::Keyboard::W)) {
-        m_player.velocity.y -= ACCELERATION;
+        m_player.velocity.x -= std::cos(rotation + PI) * ACCELERATION;
+        m_player.velocity.y -= std::sin(rotation + PI) * ACCELERATION;
     }
     else if (m_keyboard.isKeyDown(sf::Keyboard::S)) {
-        m_player.velocity.y += ACCELERATION;
+        m_player.velocity.x += std::cos(rotation + PI) * ACCELERATION;
+        m_player.velocity.y += std::sin(rotation + PI) * ACCELERATION;
     }
-
     if (m_keyboard.isKeyDown(sf::Keyboard::A)) {
-        m_player.velocity.x -= ACCELERATION;
+        m_player.velocity.x -= std::cos(rotation) * ACCELERATION;
+        m_player.velocity.y -= std::sin(rotation) * ACCELERATION;
     }
     else if (m_keyboard.isKeyDown(sf::Keyboard::D)) {
-        m_player.velocity.x += ACCELERATION;
+        m_player.velocity.x += std::cos(rotation) * ACCELERATION;
+        m_player.velocity.y += std::sin(rotation) * ACCELERATION;
     }
 }
 
