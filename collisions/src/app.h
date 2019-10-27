@@ -3,21 +3,18 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
-#include <vector>
 
 #include "input/keyboard.h"
+#include "tile_map.h"
 
 class Application {
     struct Entity {
+        sf::RectangleShape body;
         sf::RectangleShape sprite;
         sf::Vector2f velocity;
     };
 
   public:
-    struct Tile {
-        int type;
-        int flag;
-    };
     Application();
 
     void run();
@@ -28,12 +25,12 @@ class Application {
     void onUpdate();
     void onRender();
 
-    sf::RectangleShape m_tile;
+    void collide(float vx, float vy);
+
     sf::RenderWindow m_window;
     sf::Texture m_playerTexture;
 
     Keyboard m_keyboard;
     Entity m_player;
-
-    std::vector<Tile> m_world;
+    TileMap m_tileMap;
 };

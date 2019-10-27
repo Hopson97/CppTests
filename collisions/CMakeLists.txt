@@ -7,6 +7,7 @@ project(collisions VERSION 1.0)
 set(SOURCES
     src/main.cpp
     src/app.cpp
+    src/tile_map.cpp
     src/input/keyboard.cpp
 )
 

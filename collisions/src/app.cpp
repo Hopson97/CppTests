@@ -4,36 +4,8 @@
 #include <cmath>
 #include <iostream>
 
-namespace {
-    auto index(int x, int y) { return y * WORLD_SIZE + x; }
-
-    auto createWorld()
-    {
-        std::vector<Application::Tile> world(WORLD_SIZE * WORLD_SIZE);
-
-        for (int y = 0; y < WORLD_SIZE; y++) {
-            for (int x = 0; x < WORLD_SIZE; x++) {
-                if (x == 0 || y == 0 || x == WORLD_SIZE - 1 ||
-                    y == WORLD_SIZE - 1) {
-                    world[index(x, y)].type = 1;
-                }
-                else {
-                    if ((x > 3 || y > 3) && rand() % 100 > 80) {
-                        world[index(x, y)].type = 1;
-                    }
-                    else {
-                        world[index(x, y)].type = 0;
-                    }
-                }
-            }
-        }
-        return world;
-    }
-} // namespace
-
 Application::Application()
     : m_window({WIN_WIDTH, WIN_HEIGHT}, "Collision Testing")
-    , m_world(createWorld())
 {
     m_window.setFramerateLimit(60);
     m_window.setKeyRepeatEnabled(false);
@@ -41,15 +13,13 @@ Application::Application()
     m_playerTexture.loadFromFile("res/person.png");
 
     m_player.sprite.setSize({PLAYER_SIZE, PLAYER_SIZE});
-    m_player.sprite.setOutlineThickness(-1);
-    m_player.sprite.setOutlineColor(sf::Color::White);
+    m_player.body.setSize({PLAYER_SIZE, PLAYER_SIZE});
+    m_player.body.setOutlineThickness(2);
+    m_player.body.setOutlineColor(sf::Color::White);
+    m_player.body.setFillColor(sf::Color::Transparent);
     m_player.sprite.setOrigin({PLAYER_SIZE / 2, PLAYER_SIZE / 2});
     m_player.sprite.setTexture(&m_playerTexture);
     m_player.sprite.setPosition(TILE_SIZE * 2.5f, TILE_SIZE * 2.5f);
-
-    m_tile.setSize({TILE_SIZE, TILE_SIZE});
-    m_tile.setOutlineThickness(-1);
-    m_tile.setOutlineColor(sf::Color::Black);
 }
 
 void Application::run()
@@ -118,75 +88,20 @@ void Application::onInput()
 
 void Application::onUpdate()
 {
-    // Reset tile states
-    for (auto &tile : m_world) {
-        tile.flag = 0;
-    }
+    m_tileMap.resetFlags();
+    m_player.sprite.move(m_player.velocity.x, 0);
+    m_player.sprite.move(0, m_player.velocity.y);
 
-    auto pos = m_player.sprite.getPosition() + m_player.velocity;
-    pos.x -= PLAYER_SIZE / 2;
-    pos.y -= PLAYER_SIZE / 2;
-    int tileX = pos.x / TILE_SIZE;
-    int tileY = pos.y / TILE_SIZE;
-    for (int y = -1; y <= 1; y++) {
-        for (int x = -1; x <= 1; x++) {
-            int newTileX = tileX + x;
-            int newTileY = tileY + y;
-            auto &tile = m_world[index(newTileX, newTileY)];
-            if (tile.type == 1) {
-                tile.flag = 1;
-                float tileX = newTileX * TILE_SIZE;
-                float tileY = newTileY * TILE_SIZE;
-                if (pos.x <= tileX + TILE_SIZE && pos.y <= tileY + TILE_SIZE &&
-                    pos.x + PLAYER_SIZE >= tileX &&
-                    pos.y + PLAYER_SIZE >= tileY) {
-                    if (pos.x <= tileX + TILE_SIZE &&
-                        pos.x + PLAYER_SIZE >= tileX) {
-                        tile.flag = 2;
-                    }
-                    if (pos.y + PLAYER_SIZE >= tileY &&
-                        pos.y <= tileY + TILE_SIZE) {
-                        tile.flag = 2;
-                    }
-                }
-            }
-        }
-    }
-
-    m_player.sprite.move(m_player.velocity);
     m_player.velocity *= ACC_DAMP;
 }
 
 void Application::onRender()
 {
-    for (int y = 0; y < WORLD_SIZE; y++) {
-        for (int x = 0; x < WORLD_SIZE; x++) {
-            if (m_world[index(x, y)].type == 0) {
-                m_tile.setFillColor(sf::Color::Green);
-            }
-            else {
-                int flag = m_world[index(x, y)].flag;
-                switch (flag) {
-                    case 0:
-                        m_tile.setFillColor(sf::Color::Blue);
-                        break;
+    m_tileMap.draw(m_window);
 
-                    case 1:
-                        m_tile.setFillColor(sf::Color::Cyan);
-                        break;
-
-                    case 2:
-                        m_tile.setFillColor(sf::Color::Red);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-            m_tile.setPosition(x * TILE_SIZE, y * TILE_SIZE);
-            m_window.draw(m_tile);
-        }
-
-        m_window.draw(m_player.sprite);
-    }
+    m_player.body.setPosition(m_player.sprite.getPosition().x - PLAYER_SIZE / 2,
+                              m_player.sprite.getPosition().y -
+                                  PLAYER_SIZE / 2);
+    m_window.draw(m_player.sprite);
+    m_window.draw(m_player.body);
 }
