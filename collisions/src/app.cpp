@@ -118,8 +118,8 @@ void Application::onInput()
 
 void Application::onUpdate()
 {
-    //Reset tile states
-    for (auto& tile : m_world) {
+    // Reset tile states
+    for (auto &tile : m_world) {
         tile.flag = 0;
     }
 
@@ -153,9 +153,8 @@ void Application::onUpdate()
         }
     }
 
-        m_player.sprite.move(m_player.velocity);
+    m_player.sprite.move(m_player.velocity);
     m_player.velocity *= ACC_DAMP;
-
 }
 
 void Application::onRender()
