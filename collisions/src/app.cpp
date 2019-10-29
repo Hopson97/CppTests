@@ -13,6 +13,7 @@ Application::Application()
 
     m_playerTexture.loadFromFile("res/person.png");
 
+    m_player.sprite.setOrigin({PLAYER_SIZE / 2, PLAYER_SIZE / 2});
     m_player.sprite.setSize({PLAYER_SIZE, PLAYER_SIZE});
     m_player.sprite.setOutlineThickness(-1);
     m_player.sprite.setOutlineColor(sf::Color::White);
@@ -59,21 +60,22 @@ void Application::onInput()
     auto dy = mousePosition.y - playerPosition.y;
     auto rotation = std::atan2(dy, dx);
 
+    m_player.sprite.setRotation(rotation / 3.14159 * 180 + 90);
     if (m_keyboard.isKeyDown(sf::Keyboard::W)) {
-        m_player.velocity.x -= std::cos(rotation + PI) * ACCELERATION;
-        m_player.velocity.y -= std::sin(rotation + PI) * ACCELERATION;
+        m_player.velocity.x += std::cos(rotation) * ACCELERATION;
+        m_player.velocity.y += std::sin(rotation) * ACCELERATION;
     }
     else if (m_keyboard.isKeyDown(sf::Keyboard::S)) {
-        m_player.velocity.x += std::cos(rotation + PI) * ACCELERATION;
-        m_player.velocity.y += std::sin(rotation + PI) * ACCELERATION;
-    }
-    if (m_keyboard.isKeyDown(sf::Keyboard::A)) {
         m_player.velocity.x -= std::cos(rotation) * ACCELERATION;
         m_player.velocity.y -= std::sin(rotation) * ACCELERATION;
     }
+    if (m_keyboard.isKeyDown(sf::Keyboard::A)) {
+        m_player.velocity.x -= std::cos(rotation + PI) * ACCELERATION;
+        m_player.velocity.y -= std::sin(rotation + PI) * ACCELERATION;
+    }
     else if (m_keyboard.isKeyDown(sf::Keyboard::D)) {
-        m_player.velocity.x += std::cos(rotation) * ACCELERATION;
-        m_player.velocity.y += std::sin(rotation) * ACCELERATION;
+        m_player.velocity.x += std::cos(rotation + PI) * ACCELERATION;
+        m_player.velocity.y += std::sin(rotation + PI) * ACCELERATION;
     }
 }
 
